@@ -462,9 +462,9 @@ def extract(model_rna,model_atac,args):
     np.save('%s/%d-atac_feat' % (args.save, args.n_labeled), atac_feat_list)
     np.save('%s/%d-label' % (args.save, args.n_labeled), label)
 
-    np.save('/home/zf/ai4science/cvpr24/sc_matching/vis/RNA/%s/%d-Ours_codes' % (args.dataset, args.n_labeled), rna_feat_list)
-    np.save('/home/zf/ai4science/cvpr24/sc_matching/vis/ATAC/%s/%d-Ours_codes' % (args.dataset, args.n_labeled), atac_feat_list)
-    np.save('/home/zf/ai4science/cvpr24/sc_matching/vis/RNA/%s/%d-label' % (args.dataset, args.n_labeled), label)
+    np.save('/home/ai4science/sc_matching/vis/RNA/%s/%d-Ours_codes' % (args.dataset, args.n_labeled), rna_feat_list)
+    np.save('/home/ai4science/sc_matching/vis/ATAC/%s/%d-Ours_codes' % (args.dataset, args.n_labeled), atac_feat_list)
+    np.save('/home/ai4science/sc_matching/vis/RNA/%s/%d-label' % (args.dataset, args.n_labeled), label)
     
 def fx_calc_map_label(view_1, view_2, label_test):
     dist = scipy.spatial.distance.cdist(view_1, view_2, 'cosine')  # rows view_1 , columns view 2
