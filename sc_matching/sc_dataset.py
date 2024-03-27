@@ -7,7 +7,7 @@ import torch.utils.data as data
 import os
 import scipy.sparse
 import random
-# 设置随机数种子
+
 np.random.seed(123)
 random.seed(123)
 
@@ -38,14 +38,14 @@ def read_from_file(data_path, label_path = None, protien_path = None):
     return data_reader, labels, protein_reader
 
 def generate_rna_atac_pairs(rna_labels, atac_labels):
-    # 统计共同的类别数量
+
     rna_label_set = set(rna_labels)
     atac_label_set = set(atac_labels)
     common_labels = rna_label_set.intersection(atac_label_set)
     num_common_labels = len(common_labels)
     #print("num_classes:", num_common_labels)
 
-    # 从rna和atac中采样共同类别的pair
+    
     pairs = []
     for label in common_labels:
         rna_indices = np.where(rna_labels == label)[0]
@@ -74,7 +74,7 @@ def generate_rna_atac_pairs(rna_labels, atac_labels):
     random.seed(123)
     random.shuffle(mapped_pairs)
 
-    # 按需选择类别并放在最前面
+   
     selected_pairs = []
     selected_labels = set()
 
@@ -83,7 +83,7 @@ def generate_rna_atac_pairs(rna_labels, atac_labels):
         if len(selected_labels) < num_classes and label not in selected_labels:
             selected_pairs.append(pair)
             selected_labels.add(label)
-    # 将剩余的tuple添加到selected_pairs中
+    
     remaining_pairs = [pair for pair in mapped_pairs if pair not in selected_pairs]
     selected_pairs.extend(remaining_pairs)
 
@@ -95,10 +95,10 @@ class CITE_ASAP(Dataset):    # length: 3662, num_classes: 7, ,train: 2930, test:
 
         self.n_labeled = n_labeled
         self.labeled_dataset = labeled_dataset
-        self.rna_paths = '/home/zf/dataset/data_cite/citeseq_control_rna.npz' # RNA gene expression from CITE-seq data
-        self.rna_label_path = '/home/zf/dataset/data_cite/citeseq_control_cellTypes.txt' # CITE-seq data cell type labels (coverted to numeric) 
-        self.atac_paths = '/home/zf/dataset/data_cite/asapseq_control_atac.npz' # ATAC gene activity matrix from ASAP-seq data
-        self.atac_label_path = '/home/zf/dataset/data_cite/asapseq_control_cellTypes.txt' # ASAP-seq data cell type labels (coverted to numeric) 
+        self.rna_paths = '/home/dataset/data_cite/citeseq_control_rna.npz' # RNA gene expression from CITE-seq data
+        self.rna_label_path = '/home/dataset/data_cite/citeseq_control_cellTypes.txt' # CITE-seq data cell type labels (coverted to numeric) 
+        self.atac_paths = '/home/dataset/data_cite/asapseq_control_atac.npz' # ATAC gene activity matrix from ASAP-seq data
+        self.atac_label_path = '/home/dataset/data_cite/asapseq_control_cellTypes.txt' # ASAP-seq data cell type labels (coverted to numeric) 
 
         self.rna, rna_labels, _ = read_from_file(self.rna_paths, self.rna_label_path) 
         self.atac, atac_labels, _ = read_from_file(self.atac_paths, self.atac_label_path) 
@@ -130,10 +130,10 @@ class snRNA_snATAC(Dataset):   # length: 7904, num_classes: 18, train: 6324, tes
     def __init__(self, partition='train', n_labeled = 200, labeled_dataset = True):
         self.n_labeled = n_labeled
         self.labeled_dataset = labeled_dataset
-        self.rna_paths = '/home/zf/dataset/data_MOp/YaoEtAl_RNA_snRNA_10X_v3_B_exprs.npz' 
-        self.rna_label_path = '/home/zf/dataset/data_MOp/YaoEtAl_RNA_snRNA_10X_v3_B_cellTypes.txt'
-        self.atac_paths = '/home/zf/dataset/data_MOp/YaoEtAl_ATAC_exprs.npz' 
-        self.atac_label_path = '/home/zf/dataset/data_MOp/YaoEtAl_ATAC_cellTypes.txt' 
+        self.rna_paths = '/home/dataset/data_MOp/YaoEtAl_RNA_snRNA_10X_v3_B_exprs.npz' 
+        self.rna_label_path = '/home/dataset/data_MOp/YaoEtAl_RNA_snRNA_10X_v3_B_cellTypes.txt'
+        self.atac_paths = '/home/dataset/data_MOp/YaoEtAl_ATAC_exprs.npz' 
+        self.atac_label_path = '/home/dataset/data_MOp/YaoEtAl_ATAC_cellTypes.txt' 
 
         self.rna, rna_labels, _ = read_from_file(self.rna_paths, self.rna_label_path) 
         self.atac, atac_labels, _ = read_from_file(self.atac_paths, self.atac_label_path) 
@@ -164,10 +164,10 @@ class snRNA_snmC(Dataset):   # length: 8270, num_classes: 17 ,train: 6616, test:
     def __init__(self, partition='train', n_labeled = 200, labeled_dataset = True):
         self.n_labeled = n_labeled
         self.labeled_dataset = labeled_dataset
-        self.rna_paths = '/home/zf/dataset/data_MOp/YaoEtAl_RNA_snRNA_10X_v3_B_exprs.npz' 
-        self.rna_label_path = '/home/zf/dataset/data_MOp/YaoEtAl_RNA_snRNA_10X_v3_B_cellTypes.txt'
-        self.atac_paths = '/home/zf/dataset/data_MOp/YaoEtAl_snmC_exprs.npz'
-        self.atac_label_path = '/home/zf/dataset/data_MOp/YaoEtAl_snmC_cellTypes.txt' 
+        self.rna_paths = '/home/dataset/data_MOp/YaoEtAl_RNA_snRNA_10X_v3_B_exprs.npz' 
+        self.rna_label_path = '/home/dataset/data_MOp/YaoEtAl_RNA_snRNA_10X_v3_B_cellTypes.txt'
+        self.atac_paths = '/home/dataset/data_MOp/YaoEtAl_snmC_exprs.npz'
+        self.atac_label_path = '/home/dataset/data_MOp/YaoEtAl_snmC_cellTypes.txt' 
 
         self.rna, rna_labels, _ = read_from_file(self.rna_paths, self.rna_label_path) 
         self.atac, atac_labels, _ = read_from_file(self.atac_paths, self.atac_label_path) 
@@ -199,7 +199,7 @@ if __name__ == '__main__':
     cite_asap_train = CITE_ASAP('train',400, labeled_dataset = True)
     print('labeled train_dataset length:',len(cite_asap_train))
     label_counts = Counter(pair[2] for pair in cite_asap_train.mapped_pairs)
-    # 输出类别出现次数
+   
     print("labeled train_dataset class nums:")
     for label, count in label_counts.items():
         print("Label:", label, "Count:", count)
@@ -207,7 +207,7 @@ if __name__ == '__main__':
     cite_asap_train_unlabeled = CITE_ASAP('train',400, labeled_dataset = False)     
     print('unlabeled train_dataset length:',len(cite_asap_train_unlabeled))
     label_counts = Counter(pair[2] for pair in cite_asap_train_unlabeled.mapped_pairs)
-    # 输出类别出现次数
+  
     print("unlabeled train_dataset class nums:")
     for label, count in label_counts.items():
         print("Label:", label, "Count:", count)
@@ -215,7 +215,7 @@ if __name__ == '__main__':
     cite_asap_test = CITE_ASAP('test')
     print('test_dataset length:',len(cite_asap_test))
     label_counts = Counter(pair[2] for pair in cite_asap_test.mapped_pairs)
-    # 输出类别出现次数
+  
     print("test_dataset class nums:")
     for label, count in label_counts.items():
         print("Label:", label, "Count:", count)
@@ -224,7 +224,7 @@ if __name__ == '__main__':
     cite_asap_train = snRNA_snATAC('train',400, labeled_dataset = True)
     print('labeled train_dataset length:',len(cite_asap_train))
     label_counts = Counter(pair[2] for pair in cite_asap_train.mapped_pairs)
-    # 输出类别出现次数
+ 
     print("labeled train_dataset class nums:")
     for label, count in label_counts.items():
         print("Label:", label, "Count:", count)
@@ -232,7 +232,7 @@ if __name__ == '__main__':
     cite_asap_train_unlabeled = snRNA_snATAC('train',400, labeled_dataset = False)     
     print('unlabeled train_dataset length:',len(cite_asap_train_unlabeled))
     label_counts = Counter(pair[2] for pair in cite_asap_train_unlabeled.mapped_pairs)
-    # 输出类别出现次数
+ 
     print("unlabeled train_dataset class nums:")
     for label, count in label_counts.items():
         print("Label:", label, "Count:", count)
@@ -240,7 +240,7 @@ if __name__ == '__main__':
     cite_asap_test = snRNA_snATAC('test')
     print('test_dataset length:',len(cite_asap_test))
     label_counts = Counter(pair[2] for pair in cite_asap_test.mapped_pairs)
-    # 输出类别出现次数
+
     print("test_dataset class nums:")
     for label, count in label_counts.items():
         print("Label:", label, "Count:", count)
@@ -249,7 +249,7 @@ if __name__ == '__main__':
     cite_asap_train = snRNA_snmC('train',400, labeled_dataset = True)
     print('labeled train_dataset length:',len(cite_asap_train))
     label_counts = Counter(pair[2] for pair in cite_asap_train.mapped_pairs)
-    # 输出类别出现次数
+
     print("labeled train_dataset class nums:")
     for label, count in label_counts.items():
         print("Label:", label, "Count:", count)
@@ -257,7 +257,7 @@ if __name__ == '__main__':
     cite_asap_train_unlabeled = snRNA_snmC('train',400, labeled_dataset = False)     
     print('unlabeled train_dataset length:',len(cite_asap_train_unlabeled))
     label_counts = Counter(pair[2] for pair in cite_asap_train_unlabeled.mapped_pairs)
-    # 输出类别出现次数
+  
     print("unlabeled train_dataset class nums:")
     for label, count in label_counts.items():
         print("Label:", label, "Count:", count)
@@ -265,7 +265,7 @@ if __name__ == '__main__':
     cite_asap_test = snRNA_snmC('test')
     print('test_dataset length:',len(cite_asap_test))
     label_counts = Counter(pair[2] for pair in cite_asap_test.mapped_pairs)
-    # 输出类别出现次数
+ 
     print("test_dataset class nums:")
     for label, count in label_counts.items():
         print("Label:", label, "Count:", count)
